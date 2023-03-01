@@ -15,6 +15,7 @@ import com.devs.devs.business.responses.programmingLanguageTechnologies.CreatePr
 import com.devs.devs.business.responses.programmingLanguageTechnologies.GetAllProgrammingLanguageTechnologyResponse;
 import com.devs.devs.business.responses.programmingLanguageTechnologies.UpdateProgrammingLanguageTechnologiesResponse;
 import com.devs.devs.business.rules.ProgrammingLanguageTechnologyRules;
+import com.devs.devs.core.utilities.mappers.ModelMapperService;
 import com.devs.devs.dataAccess.abstracts.ProgrammingLanguageTechnologyRepository;
 import com.devs.devs.entities.concretes.ProgrammingLanguage;
 import com.devs.devs.entities.concretes.ProgrammingLanguageTechnology;
@@ -23,13 +24,16 @@ import com.devs.devs.entities.concretes.ProgrammingLanguageTechnology;
 public class ProgrammingLanguageTechnologyManager implements ProgrammingLanguageTechnologyService {
         ProgrammingLanguageTechnologyRepository programmingLanguageTechnologyRepository;
         ProgrammingLanguageTechnologyRules programmingLanguageTechnologyRules;
+        ModelMapperService modelMapperService;
 
         @Autowired
         public ProgrammingLanguageTechnologyManager(
                         ProgrammingLanguageTechnologyRepository programmingLanguageTechnologyRepository,
-                        ProgrammingLanguageTechnologyRules programmingLanguageTechnologyRules) {
+                        ProgrammingLanguageTechnologyRules programmingLanguageTechnologyRules,
+                        ModelMapperService modelMapperService) {
                 this.programmingLanguageTechnologyRepository = programmingLanguageTechnologyRepository;
                 this.programmingLanguageTechnologyRules = programmingLanguageTechnologyRules;
+                this.modelMapperService = modelMapperService;
         }
 
         @Override
@@ -40,19 +44,19 @@ public class ProgrammingLanguageTechnologyManager implements ProgrammingLanguage
                 programmingLanguageTechnologyRules.programmingLanguageTechnologyNameCanNotBeDuplicated(
                                 createProgrammingLanguageTechnologyRequest.getName());
 
-                ProgrammingLanguageTechnology programmingLanguageTechnology = new ProgrammingLanguageTechnology();
-                programmingLanguageTechnology.setName(createProgrammingLanguageTechnologyRequest.getName());
-                ProgrammingLanguage programmingLanguage = new ProgrammingLanguage();
-                programmingLanguage.setId(createProgrammingLanguageTechnologyRequest.getProgrammingLanguageId());
+                ProgrammingLanguageTechnology programmingLanguageTechnology = modelMapperService.forRequest()
+                                .map(createProgrammingLanguageTechnologyRequest, ProgrammingLanguageTechnology.class);
+                programmingLanguageTechnology.setId(0);
+
+                ProgrammingLanguage programmingLanguage = modelMapperService.forResponse()
+                                .map(createProgrammingLanguageTechnologyRequest, ProgrammingLanguage.class);
+
                 programmingLanguageTechnology.setProgrammingLanguage(programmingLanguage);
 
                 programmingLanguageTechnologyRepository.save(programmingLanguageTechnology);
 
-                CreateProgrammingLanguageTechnologyResponse result = new CreateProgrammingLanguageTechnologyResponse();
-                result.setId(programmingLanguageTechnology.getId());
-                result.setName(programmingLanguageTechnology.getName());
-
-                return result;
+                return modelMapperService.forResponse().map(programmingLanguageTechnology,
+                                CreateProgrammingLanguageTechnologyResponse.class);
         }
 
         @Override
@@ -84,12 +88,12 @@ public class ProgrammingLanguageTechnologyManager implements ProgrammingLanguage
                                 .programmingLanguageTechnologyShouldExist(
                                                 updateProgrammingLanguageTechnologiesRequest.getId());
 
-                ProgrammingLanguageTechnology programmingLanguageTechnology = programmingLanguageTechnologyRepository
-                                .findById(updateProgrammingLanguageTechnologiesRequest.getId());
+                ProgrammingLanguageTechnology programmingLanguageTechnology = modelMapperService.forRequest().map(
+                                updateProgrammingLanguageTechnologiesRequest,
+                                ProgrammingLanguageTechnology.class);
 
-                programmingLanguageTechnology.setName(updateProgrammingLanguageTechnologiesRequest.getName());
-
-                programmingLanguageTechnologyRepository.save(programmingLanguageTechnology);
+                programmingLanguageTechnology = programmingLanguageTechnologyRepository
+                                .save(programmingLanguageTechnology);
 
                 UpdateProgrammingLanguageTechnologiesResponse result = new UpdateProgrammingLanguageTechnologiesResponse();
                 result.setProgrammingLanguageId(programmingLanguageTechnology.getProgrammingLanguage().getId());

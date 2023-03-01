@@ -30,4 +30,11 @@ public class ProgrammingLanguageBusinessRules {
         }
     }
 
+    public void programmingLanguageNameShouldNotBeEmptyOrNull(String name) throws BusinessException {
+        if (name.isEmpty()) {
+            throw new BusinessException("programlama dili adı gerekli");
+        }
+    }
+    
+
 }

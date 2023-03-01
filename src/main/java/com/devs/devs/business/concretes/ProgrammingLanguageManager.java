@@ -19,33 +19,28 @@ import com.devs.devs.business.responses.programmingLanguages.UpdateProgrammingLa
 import com.devs.devs.business.rules.ProgrammingLanguageBusinessRules;
 import com.devs.devs.dataAccess.abstracts.ProgrammingLanguageRepository;
 import com.devs.devs.entities.concretes.ProgrammingLanguage;
+import com.devs.devs.core.utilities.mappers.ModelMapperService;;
 
 @Service
 public class ProgrammingLanguageManager implements ProgrammingLanguageService {
     ProgrammingLanguageRepository programmingLanguageRepository;
     ProgrammingLanguageBusinessRules programmingLanguageBusinessRules;
+    ModelMapperService modelMapperService;
 
     @Autowired
     public ProgrammingLanguageManager(ProgrammingLanguageRepository programmingLanguageRepository,
-            ProgrammingLanguageBusinessRules programmingLanguageBusinessRules) {
+            ProgrammingLanguageBusinessRules programmingLanguageBusinessRules, ModelMapperService modelMapperService) {
         this.programmingLanguageRepository = programmingLanguageRepository;
         this.programmingLanguageBusinessRules = programmingLanguageBusinessRules;
+        this.modelMapperService = modelMapperService;
     }
 
     @Override
     public List<GetAllProgrammingLanguageResponse> getAll() {
         List<ProgrammingLanguage> programmingLanguages = programmingLanguageRepository.findAll();
-        List<GetAllProgrammingLanguageResponse> result = new ArrayList<>();
+        return programmingLanguages.stream().map(programmingLanguage -> modelMapperService.forResponse()
+                .map(programmingLanguage, GetAllProgrammingLanguageResponse.class)).toList();
 
-        for (ProgrammingLanguage programmingLanguage : programmingLanguages) {
-            GetAllProgrammingLanguageResponse responseItem = new GetAllProgrammingLanguageResponse();
-
-            responseItem.setId(programmingLanguage.getId());
-            responseItem.setName(programmingLanguage.getName());
-            result.add(responseItem);
-        }
-
-        return result;
     }
 
     @Override
@@ -56,43 +51,43 @@ public class ProgrammingLanguageManager implements ProgrammingLanguageService {
         if (programmingLanguage == null) {
             return null;
         }
-        return new GetByIdProgrammingLanguageResponse(programmingLanguage.getId(),
-                programmingLanguage.getName());
+        return modelMapperService.forResponse().map(programmingLanguage, GetByIdProgrammingLanguageResponse.class);
     }
 
     @Override
     public CreateProgrammingLanguageResponse add(CreateProgrammingLanguageRequest createProgrammingLanguageRequest)
             throws BusinessException {
-        programmingLanguageNameShouldNotBeEmptyOrNull(createProgrammingLanguageRequest.getName());
+        programmingLanguageBusinessRules
+                .programmingLanguageNameShouldNotBeEmptyOrNull(createProgrammingLanguageRequest.getName());
 
         programmingLanguageBusinessRules
                 .programmingLanguageNameCanNotBeDuplicated(createProgrammingLanguageRequest.getName());
 
-        ProgrammingLanguage programmingLanguage = new ProgrammingLanguage();
-
-        programmingLanguage.setName(createProgrammingLanguageRequest.getName());
+        ProgrammingLanguage programmingLanguage = modelMapperService.forRequest().map(createProgrammingLanguageRequest,
+                ProgrammingLanguage.class);
 
         programmingLanguageRepository.save(programmingLanguage);
 
-        return new CreateProgrammingLanguageResponse(programmingLanguage.getId(),
-                programmingLanguage.getName());
+        return modelMapperService.forResponse().map(programmingLanguage, CreateProgrammingLanguageResponse.class);
     }
 
     @Override
     public UpdateProgrammingLanguageResponse update(
             UpdateProgrammingLanguageRequest updateProgrammingLanguageRequest) throws BusinessException {
-        programmingLanguageNameShouldNotBeEmptyOrNull(updateProgrammingLanguageRequest.getName());
+        programmingLanguageBusinessRules
+                .programmingLanguageNameShouldNotBeEmptyOrNull(updateProgrammingLanguageRequest.getName());
         programmingLanguageBusinessRules.programmingLanguageShouldExist(updateProgrammingLanguageRequest.getId());
         programmingLanguageBusinessRules
                 .programmingLanguageNameCanNotBeDuplicated(updateProgrammingLanguageRequest.getName());
 
-        ProgrammingLanguage programmingLanguage = new ProgrammingLanguage();
-        programmingLanguage.setId(updateProgrammingLanguageRequest.getId());
-        programmingLanguage.setName(updateProgrammingLanguageRequest.getName());
+        ProgrammingLanguage programmingLanguage = modelMapperService.forRequest().map(updateProgrammingLanguageRequest,
+                ProgrammingLanguage.class);
+
+        programmingLanguage.setProgrammingLanguagetechnologies(new ArrayList<>());
 
         programmingLanguageRepository.save(programmingLanguage);
-        return new UpdateProgrammingLanguageResponse(programmingLanguage.getId(),
-                programmingLanguage.getName());
+
+        return modelMapperService.forResponse().map(programmingLanguage, UpdateProgrammingLanguageResponse.class);
     }
 
     @Override
@@ -100,11 +95,4 @@ public class ProgrammingLanguageManager implements ProgrammingLanguageService {
         programmingLanguageBusinessRules.programmingLanguageShouldExist(deleteProgrammingLanguageRequest.getId());
         programmingLanguageRepository.deleteById(deleteProgrammingLanguageRequest.getId());
     }
-
-    private void programmingLanguageNameShouldNotBeEmptyOrNull(String name) throws BusinessException {
-        if (name.isEmpty()) {
-            throw new BusinessException("programlama dili adı gerekli");
-        }
-    }
-
 }
