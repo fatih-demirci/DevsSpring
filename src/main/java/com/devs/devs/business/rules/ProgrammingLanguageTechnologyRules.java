@@ -2,7 +2,7 @@ package com.devs.devs.business.rules;
 
 import org.springframework.stereotype.Service;
 
-import com.devs.devs.business.exceptions.BusinessException;
+import com.devs.devs.core.utilities.exceptions.BusinessException;
 import com.devs.devs.dataAccess.abstracts.ProgrammingLanguageTechnologyRepository;
 import com.devs.devs.entities.concretes.ProgrammingLanguageTechnology;
 

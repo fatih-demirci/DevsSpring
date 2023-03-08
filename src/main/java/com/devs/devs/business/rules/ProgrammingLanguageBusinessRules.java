@@ -3,7 +3,7 @@ package com.devs.devs.business.rules;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.devs.devs.business.exceptions.BusinessException;
+import com.devs.devs.core.utilities.exceptions.BusinessException;
 import com.devs.devs.dataAccess.abstracts.ProgrammingLanguageRepository;
 import com.devs.devs.entities.concretes.ProgrammingLanguage;
 
