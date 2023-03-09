@@ -17,7 +17,6 @@ import com.devs.devs.business.requests.programmingLanguageTechnologies.UpdatePro
 import com.devs.devs.business.responses.programmingLanguageTechnologies.CreateProgrammingLanguageTechnologyResponse;
 import com.devs.devs.business.responses.programmingLanguageTechnologies.GetAllProgrammingLanguageTechnologyResponse;
 import com.devs.devs.business.responses.programmingLanguageTechnologies.UpdateProgrammingLanguageTechnologiesResponse;
-import com.devs.devs.core.utilities.exceptions.BusinessException;
 
 @RestController
 @RequestMapping("/api/ProgrammingLanguageTechnologies")
@@ -33,8 +32,7 @@ public class ProgrammingLanguageTechnologiesController {
 
     @PostMapping("/add")
     public CreateProgrammingLanguageTechnologyResponse add(
-            CreateProgrammingLanguageTechnologyRequest createProgrammingLanguageTechnologyRequest)
-            throws BusinessException {
+            CreateProgrammingLanguageTechnologyRequest createProgrammingLanguageTechnologyRequest) {
         return programmingLanguageTechnologyService.add(createProgrammingLanguageTechnologyRequest);
     }
 
@@ -45,14 +43,12 @@ public class ProgrammingLanguageTechnologiesController {
 
     @PutMapping("/update")
     public UpdateProgrammingLanguageTechnologiesResponse update(
-            UpdateProgrammingLanguageTechnologiesRequest updateProgrammingLanguageTechnologiesRequest)
-            throws BusinessException {
+            UpdateProgrammingLanguageTechnologiesRequest updateProgrammingLanguageTechnologiesRequest) {
         return programmingLanguageTechnologyService.update(updateProgrammingLanguageTechnologiesRequest);
     }
 
     @DeleteMapping("/delete")
-    public void delete(DeleteProgrammingLanguageTechnologyRequest deleteProgrammingLanguageTechnologyRequest)
-            throws BusinessException {
+    public void delete(DeleteProgrammingLanguageTechnologyRequest deleteProgrammingLanguageTechnologyRequest) {
         programmingLanguageTechnologyService.delete(deleteProgrammingLanguageTechnologyRequest);
     }
 }

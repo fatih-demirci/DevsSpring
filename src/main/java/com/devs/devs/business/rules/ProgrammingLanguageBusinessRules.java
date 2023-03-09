@@ -16,25 +16,24 @@ public class ProgrammingLanguageBusinessRules {
         this.programmingLanguageRepository = programmingLanguageRepository;
     }
 
-    public void programmingLanguageShouldExist(int id) throws BusinessException {
+    public void programmingLanguageShouldExist(int id) {
         ProgrammingLanguage programmingLanguage = programmingLanguageRepository.findById(id);
         if (programmingLanguage == null) {
             throw new BusinessException("Programlama dili mevcut değil");
         }
     }
 
-    public void programmingLanguageNameCanNotBeDuplicated(String name) throws BusinessException {
+    public void programmingLanguageNameCanNotBeDuplicated(String name) {
         ProgrammingLanguage programmingLanguage = programmingLanguageRepository.findByName(name);
         if (programmingLanguage != null) {
             throw new BusinessException("Programlama dili adı zaten var");
         }
     }
 
-    public void programmingLanguageNameShouldNotBeEmptyOrNull(String name) throws BusinessException {
+    public void programmingLanguageNameShouldNotBeEmptyOrNull(String name) {
         if (name.isEmpty()) {
             throw new BusinessException("programlama dili adı gerekli");
         }
     }
-    
 
 }

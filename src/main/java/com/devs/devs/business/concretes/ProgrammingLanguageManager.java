@@ -18,81 +18,90 @@ import com.devs.devs.business.responses.programmingLanguages.UpdateProgrammingLa
 import com.devs.devs.business.rules.ProgrammingLanguageBusinessRules;
 import com.devs.devs.dataAccess.abstracts.ProgrammingLanguageRepository;
 import com.devs.devs.entities.concretes.ProgrammingLanguage;
-import com.devs.devs.core.utilities.exceptions.BusinessException;
 import com.devs.devs.core.utilities.mappers.ModelMapperService;;
 
 @Service
 public class ProgrammingLanguageManager implements ProgrammingLanguageService {
-    ProgrammingLanguageRepository programmingLanguageRepository;
-    ProgrammingLanguageBusinessRules programmingLanguageBusinessRules;
-    ModelMapperService modelMapperService;
+        ProgrammingLanguageRepository programmingLanguageRepository;
+        ProgrammingLanguageBusinessRules programmingLanguageBusinessRules;
+        ModelMapperService modelMapperService;
 
-    @Autowired
-    public ProgrammingLanguageManager(ProgrammingLanguageRepository programmingLanguageRepository,
-            ProgrammingLanguageBusinessRules programmingLanguageBusinessRules, ModelMapperService modelMapperService) {
-        this.programmingLanguageRepository = programmingLanguageRepository;
-        this.programmingLanguageBusinessRules = programmingLanguageBusinessRules;
-        this.modelMapperService = modelMapperService;
-    }
-
-    @Override
-    public List<GetAllProgrammingLanguageResponse> getAll() {
-        List<ProgrammingLanguage> programmingLanguages = programmingLanguageRepository.findAll();
-        return programmingLanguages.stream().map(programmingLanguage -> modelMapperService.forResponse()
-                .map(programmingLanguage, GetAllProgrammingLanguageResponse.class)).toList();
-
-    }
-
-    @Override
-    public GetByIdProgrammingLanguageResponse getById(
-            GetByIdProgrammingLanguageRequest getByIdProgrammingLanguageRequest) {
-        ProgrammingLanguage programmingLanguage = programmingLanguageRepository
-                .findById(getByIdProgrammingLanguageRequest.getId());
-        if (programmingLanguage == null) {
-            return null;
+        @Autowired
+        public ProgrammingLanguageManager(ProgrammingLanguageRepository programmingLanguageRepository,
+                        ProgrammingLanguageBusinessRules programmingLanguageBusinessRules,
+                        ModelMapperService modelMapperService) {
+                this.programmingLanguageRepository = programmingLanguageRepository;
+                this.programmingLanguageBusinessRules = programmingLanguageBusinessRules;
+                this.modelMapperService = modelMapperService;
         }
-        return modelMapperService.forResponse().map(programmingLanguage, GetByIdProgrammingLanguageResponse.class);
-    }
 
-    @Override
-    public CreateProgrammingLanguageResponse add(CreateProgrammingLanguageRequest createProgrammingLanguageRequest)
-            throws BusinessException {
-        programmingLanguageBusinessRules
-                .programmingLanguageNameShouldNotBeEmptyOrNull(createProgrammingLanguageRequest.getName());
+        @Override
+        public List<GetAllProgrammingLanguageResponse> getAll() {
+                List<ProgrammingLanguage> programmingLanguages = programmingLanguageRepository.findAll();
+                return programmingLanguages.stream().map(programmingLanguage -> modelMapperService.forResponse()
+                                .map(programmingLanguage, GetAllProgrammingLanguageResponse.class)).toList();
 
-        programmingLanguageBusinessRules
-                .programmingLanguageNameCanNotBeDuplicated(createProgrammingLanguageRequest.getName());
+        }
 
-        ProgrammingLanguage programmingLanguage = modelMapperService.forRequest().map(createProgrammingLanguageRequest,
-                ProgrammingLanguage.class);
+        @Override
+        public GetByIdProgrammingLanguageResponse getById(
+                        GetByIdProgrammingLanguageRequest getByIdProgrammingLanguageRequest) {
+                ProgrammingLanguage programmingLanguage = programmingLanguageRepository
+                                .findById(getByIdProgrammingLanguageRequest.getId());
+                if (programmingLanguage == null) {
+                        return null;
+                }
+                return modelMapperService.forResponse().map(programmingLanguage,
+                                GetByIdProgrammingLanguageResponse.class);
+        }
 
-        programmingLanguageRepository.save(programmingLanguage);
+        @Override
+        public CreateProgrammingLanguageResponse add(
+                        CreateProgrammingLanguageRequest createProgrammingLanguageRequest) {
+                programmingLanguageBusinessRules
+                                .programmingLanguageNameShouldNotBeEmptyOrNull(
+                                                createProgrammingLanguageRequest.getName());
 
-        return modelMapperService.forResponse().map(programmingLanguage, CreateProgrammingLanguageResponse.class);
-    }
+                programmingLanguageBusinessRules
+                                .programmingLanguageNameCanNotBeDuplicated(createProgrammingLanguageRequest.getName());
 
-    @Override
-    public UpdateProgrammingLanguageResponse update(
-            UpdateProgrammingLanguageRequest updateProgrammingLanguageRequest) throws BusinessException {
-        programmingLanguageBusinessRules
-                .programmingLanguageNameShouldNotBeEmptyOrNull(updateProgrammingLanguageRequest.getName());
-        programmingLanguageBusinessRules.programmingLanguageShouldExist(updateProgrammingLanguageRequest.getId());
-        programmingLanguageBusinessRules
-                .programmingLanguageNameCanNotBeDuplicated(updateProgrammingLanguageRequest.getName());
+                ProgrammingLanguage programmingLanguage = modelMapperService.forRequest().map(
+                                createProgrammingLanguageRequest,
+                                ProgrammingLanguage.class);
 
-        ProgrammingLanguage programmingLanguage = modelMapperService.forRequest().map(updateProgrammingLanguageRequest,
-                ProgrammingLanguage.class);
+                programmingLanguageRepository.save(programmingLanguage);
 
-        programmingLanguage.setProgrammingLanguagetechnologies(new ArrayList<>());
+                return modelMapperService.forResponse().map(programmingLanguage,
+                                CreateProgrammingLanguageResponse.class);
+        }
 
-        programmingLanguageRepository.save(programmingLanguage);
+        @Override
+        public UpdateProgrammingLanguageResponse update(
+                        UpdateProgrammingLanguageRequest updateProgrammingLanguageRequest) {
+                programmingLanguageBusinessRules
+                                .programmingLanguageNameShouldNotBeEmptyOrNull(
+                                                updateProgrammingLanguageRequest.getName());
+                programmingLanguageBusinessRules
+                                .programmingLanguageShouldExist(updateProgrammingLanguageRequest.getId());
+                programmingLanguageBusinessRules
+                                .programmingLanguageNameCanNotBeDuplicated(updateProgrammingLanguageRequest.getName());
 
-        return modelMapperService.forResponse().map(programmingLanguage, UpdateProgrammingLanguageResponse.class);
-    }
+                ProgrammingLanguage programmingLanguage = modelMapperService.forRequest().map(
+                                updateProgrammingLanguageRequest,
+                                ProgrammingLanguage.class);
 
-    @Override
-    public void delete(DeleteProgrammingLanguageRequest deleteProgrammingLanguageRequest) throws BusinessException {
-        programmingLanguageBusinessRules.programmingLanguageShouldExist(deleteProgrammingLanguageRequest.getId());
-        programmingLanguageRepository.deleteById(deleteProgrammingLanguageRequest.getId());
-    }
+                programmingLanguage.setProgrammingLanguagetechnologies(new ArrayList<>());
+
+                programmingLanguageRepository.save(programmingLanguage);
+
+                return modelMapperService.forResponse().map(programmingLanguage,
+                                UpdateProgrammingLanguageResponse.class);
+        }
+
+        @Override
+        public void delete(DeleteProgrammingLanguageRequest deleteProgrammingLanguageRequest) {
+                programmingLanguageBusinessRules
+                                .programmingLanguageShouldExist(deleteProgrammingLanguageRequest.getId());
+                programmingLanguageRepository.deleteById(deleteProgrammingLanguageRequest.getId());
+        }
 }

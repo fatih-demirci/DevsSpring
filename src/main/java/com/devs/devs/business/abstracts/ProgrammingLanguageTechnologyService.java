@@ -8,20 +8,16 @@ import com.devs.devs.business.requests.programmingLanguageTechnologies.UpdatePro
 import com.devs.devs.business.responses.programmingLanguageTechnologies.CreateProgrammingLanguageTechnologyResponse;
 import com.devs.devs.business.responses.programmingLanguageTechnologies.GetAllProgrammingLanguageTechnologyResponse;
 import com.devs.devs.business.responses.programmingLanguageTechnologies.UpdateProgrammingLanguageTechnologiesResponse;
-import com.devs.devs.core.utilities.exceptions.BusinessException;
 
 public interface ProgrammingLanguageTechnologyService {
 
         CreateProgrammingLanguageTechnologyResponse add(
-                        CreateProgrammingLanguageTechnologyRequest createProgrammingLanguageTechnologyRequest)
-                        throws BusinessException;
+                        CreateProgrammingLanguageTechnologyRequest createProgrammingLanguageTechnologyRequest);
 
         List<GetAllProgrammingLanguageTechnologyResponse> getAll();
 
         UpdateProgrammingLanguageTechnologiesResponse update(
-                        UpdateProgrammingLanguageTechnologiesRequest updateProgrammingLanguageTechnologiesRequest)
-                        throws BusinessException;
+                        UpdateProgrammingLanguageTechnologiesRequest updateProgrammingLanguageTechnologiesRequest);
 
-        void delete(DeleteProgrammingLanguageTechnologyRequest deleteProgrammingLanguageTechnologyRequest)
-                        throws BusinessException;
+        void delete(DeleteProgrammingLanguageTechnologyRequest deleteProgrammingLanguageTechnologyRequest);
 }

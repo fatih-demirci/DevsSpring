@@ -14,7 +14,6 @@ import com.devs.devs.business.responses.programmingLanguageTechnologies.CreatePr
 import com.devs.devs.business.responses.programmingLanguageTechnologies.GetAllProgrammingLanguageTechnologyResponse;
 import com.devs.devs.business.responses.programmingLanguageTechnologies.UpdateProgrammingLanguageTechnologiesResponse;
 import com.devs.devs.business.rules.ProgrammingLanguageTechnologyRules;
-import com.devs.devs.core.utilities.exceptions.BusinessException;
 import com.devs.devs.core.utilities.mappers.ModelMapperService;
 import com.devs.devs.dataAccess.abstracts.ProgrammingLanguageTechnologyRepository;
 import com.devs.devs.entities.concretes.ProgrammingLanguage;
@@ -38,8 +37,7 @@ public class ProgrammingLanguageTechnologyManager implements ProgrammingLanguage
 
         @Override
         public CreateProgrammingLanguageTechnologyResponse add(
-                        CreateProgrammingLanguageTechnologyRequest createProgrammingLanguageTechnologyRequest)
-                        throws BusinessException {
+                        CreateProgrammingLanguageTechnologyRequest createProgrammingLanguageTechnologyRequest) {
 
                 programmingLanguageTechnologyRules.programmingLanguageTechnologyNameCanNotBeDuplicated(
                                 createProgrammingLanguageTechnologyRequest.getName());
@@ -80,8 +78,7 @@ public class ProgrammingLanguageTechnologyManager implements ProgrammingLanguage
 
         @Override
         public UpdateProgrammingLanguageTechnologiesResponse update(
-                        UpdateProgrammingLanguageTechnologiesRequest updateProgrammingLanguageTechnologiesRequest)
-                        throws BusinessException {
+                        UpdateProgrammingLanguageTechnologiesRequest updateProgrammingLanguageTechnologiesRequest) {
                 programmingLanguageTechnologyRules.programmingLanguageTechnologyNameCanNotBeDuplicated(
                                 updateProgrammingLanguageTechnologiesRequest.getName());
                 programmingLanguageTechnologyRules
@@ -105,8 +102,7 @@ public class ProgrammingLanguageTechnologyManager implements ProgrammingLanguage
         }
 
         @Override
-        public void delete(DeleteProgrammingLanguageTechnologyRequest deleteProgrammingLanguageTechnologyRequest)
-                        throws BusinessException {
+        public void delete(DeleteProgrammingLanguageTechnologyRequest deleteProgrammingLanguageTechnologyRequest) {
                 programmingLanguageTechnologyRules
                                 .programmingLanguageTechnologyShouldExist(
                                                 deleteProgrammingLanguageTechnologyRequest.getId());

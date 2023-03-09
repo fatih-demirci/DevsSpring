@@ -19,7 +19,6 @@ import com.devs.devs.business.responses.programmingLanguages.CreateProgrammingLa
 import com.devs.devs.business.responses.programmingLanguages.GetAllProgrammingLanguageResponse;
 import com.devs.devs.business.responses.programmingLanguages.GetByIdProgrammingLanguageResponse;
 import com.devs.devs.business.responses.programmingLanguages.UpdateProgrammingLanguageResponse;
-import com.devs.devs.core.utilities.exceptions.BusinessException;
 
 @RestController
 @RequestMapping(name = "api/ProgrammingLanguages")
@@ -43,19 +42,17 @@ public class ProgrammingLanguagesController {
     }
 
     @PostMapping("/add")
-    public CreateProgrammingLanguageResponse add(CreateProgrammingLanguageRequest createProgrammingLanguageRequest)
-            throws BusinessException {
+    public CreateProgrammingLanguageResponse add(CreateProgrammingLanguageRequest createProgrammingLanguageRequest) {
         return programmingLanguageService.add(createProgrammingLanguageRequest);
     }
 
     @PutMapping("/update")
-    public UpdateProgrammingLanguageResponse update(UpdateProgrammingLanguageRequest updateProgrammingLanguageRequest)
-            throws BusinessException {
+    public UpdateProgrammingLanguageResponse update(UpdateProgrammingLanguageRequest updateProgrammingLanguageRequest) {
         return programmingLanguageService.update(updateProgrammingLanguageRequest);
     }
 
     @DeleteMapping("/delete")
-    public void delete(DeleteProgrammingLanguageRequest deleteProgrammingLanguageRequest) throws BusinessException {
+    public void delete(DeleteProgrammingLanguageRequest deleteProgrammingLanguageRequest) {
         programmingLanguageService.delete(deleteProgrammingLanguageRequest);
     }
 

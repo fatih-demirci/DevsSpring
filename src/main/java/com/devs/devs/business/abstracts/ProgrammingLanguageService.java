@@ -10,7 +10,6 @@ import com.devs.devs.business.responses.programmingLanguages.CreateProgrammingLa
 import com.devs.devs.business.responses.programmingLanguages.GetAllProgrammingLanguageResponse;
 import com.devs.devs.business.responses.programmingLanguages.GetByIdProgrammingLanguageResponse;
 import com.devs.devs.business.responses.programmingLanguages.UpdateProgrammingLanguageResponse;
-import com.devs.devs.core.utilities.exceptions.BusinessException;
 
 public interface ProgrammingLanguageService {
         List<GetAllProgrammingLanguageResponse> getAll();
@@ -18,11 +17,9 @@ public interface ProgrammingLanguageService {
         GetByIdProgrammingLanguageResponse getById(
                         GetByIdProgrammingLanguageRequest getByIdProgrammingLanguageRequest);
 
-        CreateProgrammingLanguageResponse add(CreateProgrammingLanguageRequest createProgrammingLanguageRequest)
-                        throws BusinessException;
+        CreateProgrammingLanguageResponse add(CreateProgrammingLanguageRequest createProgrammingLanguageRequest);
 
-        UpdateProgrammingLanguageResponse update(UpdateProgrammingLanguageRequest updateProgrammingLanguageRequest)
-                        throws BusinessException;
+        UpdateProgrammingLanguageResponse update(UpdateProgrammingLanguageRequest updateProgrammingLanguageRequest);
 
-        void delete(DeleteProgrammingLanguageRequest deleteProgrammingLanguageRequest) throws BusinessException;
+        void delete(DeleteProgrammingLanguageRequest deleteProgrammingLanguageRequest);
 }

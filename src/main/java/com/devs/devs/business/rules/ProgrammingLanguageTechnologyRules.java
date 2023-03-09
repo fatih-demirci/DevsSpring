@@ -15,7 +15,7 @@ public class ProgrammingLanguageTechnologyRules {
         this.programmingLanguageTechnologyRepository = programmingLanguageTechnologyRepository;
     }
 
-    public void programmingLanguageTechnologyNameCanNotBeDuplicated(String name) throws BusinessException {
+    public void programmingLanguageTechnologyNameCanNotBeDuplicated(String name) {
         ProgrammingLanguageTechnology programmingLanguageTechnology = programmingLanguageTechnologyRepository
                 .findByName(name);
         if (programmingLanguageTechnology != null) {
@@ -23,7 +23,7 @@ public class ProgrammingLanguageTechnologyRules {
         }
     }
 
-    public void programmingLanguageTechnologyShouldExist(int id) throws BusinessException {
+    public void programmingLanguageTechnologyShouldExist(int id) {
         ProgrammingLanguageTechnology programmingLanguageTechnology = programmingLanguageTechnologyRepository
                 .findById(id);
 
