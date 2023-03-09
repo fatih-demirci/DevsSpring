@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class UpdateProgrammingLanguageTechnologiesResponse {
-    private int programmingLanguageTechnologyId;
-    private String programmingLanguageTechnologyName;
+    private int id;
+    private String name;
     private int programmingLanguageId;
     private String programmingLanguageName;
 }

@@ -1,6 +1,5 @@
 package com.devs.devs.business.concretes;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import com.devs.devs.business.responses.programmingLanguageTechnologies.UpdatePr
 import com.devs.devs.business.rules.ProgrammingLanguageTechnologyRules;
 import com.devs.devs.core.utilities.mappers.ModelMapperService;
 import com.devs.devs.dataAccess.abstracts.ProgrammingLanguageTechnologyRepository;
-import com.devs.devs.entities.concretes.ProgrammingLanguage;
 import com.devs.devs.entities.concretes.ProgrammingLanguageTechnology;
 
 @Service
@@ -46,11 +44,6 @@ public class ProgrammingLanguageTechnologyManager implements ProgrammingLanguage
                                 .map(createProgrammingLanguageTechnologyRequest, ProgrammingLanguageTechnology.class);
                 programmingLanguageTechnology.setId(0);
 
-                ProgrammingLanguage programmingLanguage = modelMapperService.forResponse()
-                                .map(createProgrammingLanguageTechnologyRequest, ProgrammingLanguage.class);
-
-                programmingLanguageTechnology.setProgrammingLanguage(programmingLanguage);
-
                 programmingLanguageTechnologyRepository.save(programmingLanguageTechnology);
 
                 return modelMapperService.forResponse().map(programmingLanguageTechnology,
@@ -61,19 +54,12 @@ public class ProgrammingLanguageTechnologyManager implements ProgrammingLanguage
         public List<GetAllProgrammingLanguageTechnologyResponse> getAll() {
                 List<ProgrammingLanguageTechnology> programmingLanguageTechnologies = programmingLanguageTechnologyRepository
                                 .findAll();
-                List<GetAllProgrammingLanguageTechnologyResponse> result = new ArrayList<>();
 
-                for (ProgrammingLanguageTechnology programmingLanguageTechnology : programmingLanguageTechnologies) {
-                        GetAllProgrammingLanguageTechnologyResponse responseItem = new GetAllProgrammingLanguageTechnologyResponse();
-                        responseItem.setProgrammingLanguageTechnologyId(programmingLanguageTechnology.getId());
-                        responseItem.setProgrammingLanguageTechnologyName(programmingLanguageTechnology.getName());
-                        responseItem.setProgrammingLanguageId(
-                                        programmingLanguageTechnology.getProgrammingLanguage().getId());
-                        responseItem.setProgrammingLanguageName(
-                                        programmingLanguageTechnology.getProgrammingLanguage().getName());
-                        result.add(responseItem);
-                }
-                return result;
+                return programmingLanguageTechnologies.stream()
+                                .map(programmingLanguageTechnology -> modelMapperService.forResponse().map(
+                                                programmingLanguageTechnology,
+                                                GetAllProgrammingLanguageTechnologyResponse.class))
+                                .toList();
         }
 
         @Override
@@ -81,31 +67,23 @@ public class ProgrammingLanguageTechnologyManager implements ProgrammingLanguage
                         UpdateProgrammingLanguageTechnologiesRequest updateProgrammingLanguageTechnologiesRequest) {
                 programmingLanguageTechnologyRules.programmingLanguageTechnologyNameCanNotBeDuplicated(
                                 updateProgrammingLanguageTechnologiesRequest.getName());
-                programmingLanguageTechnologyRules
-                                .programmingLanguageTechnologyShouldExist(
-                                                updateProgrammingLanguageTechnologiesRequest.getId());
+                programmingLanguageTechnologyRules.programmingLanguageTechnologyShouldExist(
+                                updateProgrammingLanguageTechnologiesRequest.getId());
 
-                ProgrammingLanguageTechnology programmingLanguageTechnology = modelMapperService.forRequest().map(
-                                updateProgrammingLanguageTechnologiesRequest,
-                                ProgrammingLanguageTechnology.class);
+                ProgrammingLanguageTechnology programmingLanguageTechnology = modelMapperService.forRequest()
+                                .map(updateProgrammingLanguageTechnologiesRequest, ProgrammingLanguageTechnology.class);
 
                 programmingLanguageTechnology = programmingLanguageTechnologyRepository
                                 .save(programmingLanguageTechnology);
 
-                UpdateProgrammingLanguageTechnologiesResponse result = new UpdateProgrammingLanguageTechnologiesResponse();
-                result.setProgrammingLanguageId(programmingLanguageTechnology.getProgrammingLanguage().getId());
-                result.setProgrammingLanguageName(programmingLanguageTechnology.getProgrammingLanguage().getName());
-                result.setProgrammingLanguageTechnologyId(programmingLanguageTechnology.getId());
-                result.setProgrammingLanguageTechnologyName(programmingLanguageTechnology.getName());
-
-                return result;
+                return modelMapperService.forResponse().map(programmingLanguageTechnology,
+                                UpdateProgrammingLanguageTechnologiesResponse.class);
         }
 
         @Override
         public void delete(DeleteProgrammingLanguageTechnologyRequest deleteProgrammingLanguageTechnologyRequest) {
-                programmingLanguageTechnologyRules
-                                .programmingLanguageTechnologyShouldExist(
-                                                deleteProgrammingLanguageTechnologyRequest.getId());
+                programmingLanguageTechnologyRules.programmingLanguageTechnologyShouldExist(
+                                deleteProgrammingLanguageTechnologyRequest.getId());
 
                 programmingLanguageTechnologyRepository.deleteById(deleteProgrammingLanguageTechnologyRequest.getId());
         }

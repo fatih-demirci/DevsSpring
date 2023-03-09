@@ -9,5 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 public class UpdateProgrammingLanguageTechnologiesRequest {
     private int id;
+    private int programmingLanguageId;
     private String name;
 }
